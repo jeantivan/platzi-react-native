@@ -1,12 +1,6 @@
-import {
-  SafeAreaView,
-  Text,
-  StyleSheet,
-  Platform,
-  StatusBar,
-} from "react-native";
+import { SafeAreaView, StyleSheet, Platform, StatusBar } from "react-native";
 import React, { useEffect, useState } from "react";
-import { getPokemons, getPokemonDetails } from "../api/pokemon";
+import { getPokemons, getPokemonWithDetails } from "../api/pokemon";
 import PokemonList from "../components/PokemonList";
 
 const styles = StyleSheet.create({
@@ -18,30 +12,20 @@ const styles = StyleSheet.create({
 });
 
 const Pokedex = () => {
-  const [loading, setLoading] = useState(true);
   const [pokemons, setPokemons] = useState([]);
+  const [nextPokemonsUrl, setNextPokemonsUrl] = useState(null);
 
   useEffect(() => {
-    setLoading(true);
     const loadPokemons = async () => {
       try {
         const pokemonsRes = await getPokemons();
 
-        const pokemonsWithDetails = [];
-
-        for await (const pokemon of pokemonsRes.results) {
-          const pokemonDetails = await getPokemonDetails(pokemon.url);
-
-          pokemonsWithDetails.push({
-            id: pokemonDetails.id,
-            name: pokemonDetails.name,
-            type: pokemonDetails.types[0].type.name,
-            order: pokemonDetails.order,
-            image:
-              pokemonDetails.sprites.other["official-artwork"].front_default,
-          });
+        const pokemonsWithDetails = await getPokemonsWithDetails(
+          pokemonsRes.results
+        );
+        {
         }
-        console.log("Hola..");
+        setNextPokemonsUrl(pokemonsRes.next);
         setPokemons([...pokemons, ...pokemonsWithDetails]);
       } catch (error) {
         console.error(error);
@@ -49,16 +33,30 @@ const Pokedex = () => {
     };
 
     loadPokemons();
-    setLoading(false);
   }, []);
 
-  useEffect(() => {
-    console.log(pokemons);
-  }, [pokemons]);
+  const loadMorePokemons = async () => {
+    try {
+      const nextPokemonsRes = await getPokemons(nextPokemonsUrl);
+
+      const pokemonsWithDetails = await getPokemonsWithDetails(
+        nextPokemonsRes.results
+      );
+
+      setNextPokemonsUrl(nextPokemonsRes.next);
+      setPokemons([...pokemons, ...pokemonsWithDetails]);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.AndroidSafeArea}>
-      <PokemonList pokemons={pokemons} />
+      <PokemonList
+        pokemons={pokemons}
+        loadMorePokemons={loadMorePokemons}
+        nextPokemonsUrl={nextPokemonsUrl}
+      />
     </SafeAreaView>
   );
 };
