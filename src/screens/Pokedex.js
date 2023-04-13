@@ -1,6 +1,6 @@
 import { SafeAreaView, StyleSheet, Platform, StatusBar } from "react-native";
 import React, { useEffect, useState } from "react";
-import { getPokemons, getPokemonWithDetails } from "../api/pokemon";
+import { getPokemons, getPokemonsWithDetails } from "../api/pokemon";
 import PokemonList from "../components/PokemonList";
 
 const styles = StyleSheet.create({
