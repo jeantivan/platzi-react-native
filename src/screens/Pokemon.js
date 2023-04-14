@@ -5,6 +5,7 @@ import { API_HOST } from "../utils/constants";
 import { getPokemonDetails } from "../api/pokemon";
 
 import Header from "../components/Pokemon/Header";
+import Types from "../components/Pokemon/Types";
 
 const Pokemon = ({ navigation, route }) => {
   const { id } = route.params;
@@ -34,6 +35,7 @@ const Pokemon = ({ navigation, route }) => {
         type={pokemon.types[0].type.name}
         image={pokemon.sprites.other["official-artwork"].front_default}
       />
+      <Types types={pokemon.types} />
     </ScrollView>
   );
 };
