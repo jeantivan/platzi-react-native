@@ -14,7 +14,14 @@ const PokedexNavigation = () => {
         component={Pokedex}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name="Pokemon" component={Pokemon} />
+      <Stack.Screen
+        name="Pokemon"
+        component={Pokemon}
+        options={({ route }) => ({
+          headerStyle: { backgroundColor: route.params.pokemonColor },
+        })}
+        headerS
+      />
     </Stack.Navigator>
   );
 };
