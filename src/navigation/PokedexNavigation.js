@@ -19,8 +19,8 @@ const PokedexNavigation = () => {
         component={Pokemon}
         options={({ route }) => ({
           headerStyle: { backgroundColor: route.params.pokemonColor },
+          headerTintColor: "#fff",
         })}
-        headerS
       />
     </Stack.Navigator>
   );
