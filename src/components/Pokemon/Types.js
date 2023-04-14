@@ -28,7 +28,9 @@ const Types = ({ types }) => {
             backgroundColor: getColorByPokemonType(type.name),
           }}
         >
-          <Text>{type.name}</Text>
+          <Text style={{ color: "#fff", textTransform: "capitalize" }}>
+            {type.name}
+          </Text>
         </View>
       ))}
     </View>
