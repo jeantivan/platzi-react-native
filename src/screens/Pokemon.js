@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { View, Text } from "react-native";
+import { ScrollView } from "react-native";
 
 import { API_HOST } from "../utils/constants";
 import { getPokemonDetails } from "../api/pokemon";
+
+import Header from "../components/Pokemon/Header";
 
 const Pokemon = ({ navigation, route }) => {
   const { id } = route.params;
@@ -25,10 +27,14 @@ const Pokemon = ({ navigation, route }) => {
   if (!pokemon) return null;
 
   return (
-    <View>
-      <Text>Página de pokemon con id: {id}</Text>
-      <Text>Pokemon: {pokemon.name}</Text>
-    </View>
+    <ScrollView>
+      <Header
+        name={pokemon.name}
+        id={pokemon.id}
+        type={pokemon.types[0].type.name}
+        image={pokemon.sprites.other["official-artwork"].front_default}
+      />
+    </ScrollView>
   );
 };
 
