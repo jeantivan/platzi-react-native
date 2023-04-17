@@ -6,6 +6,7 @@ import { getPokemonDetails } from "../api/pokemon";
 
 import Header from "../components/Pokemon/Header";
 import Types from "../components/Pokemon/Types";
+import Stats from "../components/Pokemon/Stats";
 
 const Pokemon = ({ navigation, route }) => {
   const { id } = route.params;
@@ -36,6 +37,7 @@ const Pokemon = ({ navigation, route }) => {
         image={pokemon.sprites.other["official-artwork"].front_default}
       />
       <Types types={pokemon.types} />
+      <Stats stats={pokemon.stats} />
     </ScrollView>
   );
 };
