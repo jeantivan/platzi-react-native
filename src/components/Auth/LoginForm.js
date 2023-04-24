@@ -6,9 +6,12 @@ import {
   TextInput,
   Keyboard,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import ErrorMsg from "../ErrorMsg";
+
+import { user, userData } from "../../utils/userDB";
 
 const styles = StyleSheet.create({
   title: {
@@ -55,10 +58,21 @@ const initialValues = {
 };
 
 const LoginForm = () => {
+  const [error, setError] = useState(null);
+
   const formik = useFormik({
     validationSchema: validationSchema,
     initialValues,
-    onSubmit(fields) {
+    onSubmit(fields, actions) {
+      setError(null);
+      const { password, username } = fields;
+
+      if (password !== user.password || username !== user.username) {
+        setError(true);
+        actions.resetForm({ values: initialValues });
+        return;
+      }
+
       console.log(fields);
     },
   });
@@ -66,9 +80,16 @@ const LoginForm = () => {
   return (
     <View>
       <Text style={styles.title}>Iniciar sesión</Text>
+      {error && (
+        <View style={{ marginHorizontal: 10, marginBottom: 50 }}>
+          <ErrorMsg msg="Nombre de usuario o contraseña es incorrecto" />
+        </View>
+      )}
+
       <View style={styles.inputContainer}>
         <TextInput
           onChangeText={(text) => formik.setFieldValue("username", text)}
+          value={formik.values.username}
           placeholder="Nombre de usuario"
           style={[
             styles.input,
@@ -86,6 +107,7 @@ const LoginForm = () => {
       <View style={styles.inputContainer}>
         <TextInput
           onChangeText={(text) => formik.setFieldValue("password", text)}
+          value={formik.values.password}
           placeholder="Contraseña"
           style={[
             styles.input,
