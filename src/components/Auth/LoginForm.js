@@ -12,6 +12,7 @@ import * as Yup from "yup";
 import ErrorMsg from "../ErrorMsg";
 
 import { user, userData } from "../../utils/userDB";
+import useAuth from "../../hooks/useAuth";
 
 const styles = StyleSheet.create({
   title: {
@@ -58,6 +59,7 @@ const initialValues = {
 };
 
 const LoginForm = () => {
+  const { login } = useAuth();
   const [error, setError] = useState(null);
 
   const formik = useFormik({
@@ -73,7 +75,8 @@ const LoginForm = () => {
         return;
       }
 
-      console.log(fields);
+      actions.resetForm();
+      login(userData);
     },
   });
 
